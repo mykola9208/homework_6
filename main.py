@@ -4,29 +4,56 @@ class Course:
         self.start_date = start_date
         self.number_of_lectures = number_of_lectures
         self.teacher = teacher
+        self.lectures = []
+        self._enrolled_by = []
+        for i in range(1, number_of_lectures+1):
+            self.lectures.append(f'{name} lecture {i}')
+            teacher.teaching_lectures(f'{name} lecture {i}')
         pass
+
+    def enrolled_by(self, student=None):
+        if student is not None:
+            self._enrolled_by.append(student)
+        return self._enrolled_by
 
     def __str__(self):
         return f'{self.name} ({self.start_date})'
+
 
 class Lecture:
     def __init__(self, name, number, teacher):
         pass
 
+
 class Homework:
     def __init__(self, name, description):
         pass
 
+
 class Student:
     def __init__(self, first_name, last_name):
+        self.first_name = first_name
+        self.last_name = last_name
         pass
+
+    def __str__(self):
+        return f'Student: {student.first_name} {student.last_name}'
+
+    def enroll(self, training):
+        training.enrolled_by(self)
 
 
 class Teacher:
     def __init__(self, first_name, last_name):
         self.first_name = first_name
         self.last_name = last_name
+        self._teaching_lectures = []
         pass
+
+    def teaching_lectures(self, lecture=None):
+        if lecture is not None:
+            self._teaching_lectures.append(lecture)
+        return self._teaching_lectures
 
     def __str__(self):
         return f'Teacher: {self.first_name} {self.last_name}'
@@ -37,19 +64,19 @@ if __name__ == '__main__':
     assert str(main_teacher) == f'Teacher: {main_teacher.first_name} {main_teacher.last_name}'
 
     python_basic = Course('Python basic', '31.10.2022', 16, main_teacher)
-    # assert len(python_basic.lectures) == python_basic.number_of_lectures
+    assert len(python_basic.lectures) == python_basic.number_of_lectures
     assert str(python_basic) == 'Python basic (31.10.2022)'
     assert python_basic.teacher == main_teacher
-    # assert python_basic.enrolled_by() == []
-    # assert main_teacher.teaching_lectures() == python_basic.lectures
-    #
-    # students = [Student('John', 'Doe'), Student('Jane', 'Doe')]
-    # for student in students:
-    #     assert str(student) == f'Student: {student.first_name} {student.last_name}'
-    #     student.enroll(python_basic)
-    #
-    # assert python_basic.enrolled_by() == students
-    #
+    assert python_basic.enrolled_by() == []
+    assert main_teacher.teaching_lectures() == python_basic.lectures
+
+    students = [Student('John', 'Doe'), Student('Jane', 'Doe')]
+    for student in students:
+        assert str(student) == f'Student: {student.first_name} {student.last_name}'
+        student.enroll(python_basic)
+
+    assert python_basic.enrolled_by() == students
+
     # third_lecture = python_basic.get_lecture(3)
     # assert third_lecture.name == 'Lecture 3'
     # assert third_lecture.number == 3
@@ -111,4 +138,5 @@ if __name__ == '__main__':
     # assert len(main_teacher.teaching_lectures()) == python_basic.number_of_lectures - 1
     # assert substitute_teacher.teaching_lectures() == [fourth_lecture]
     # assert substitute_teacher.homeworks_to_check == []
+
 
