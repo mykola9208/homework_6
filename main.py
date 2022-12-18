@@ -126,7 +126,9 @@ class Teacher:
         return self._teaching_lectures
 
     def check_homework(self, homework, student, apprizal):
-        assert 0 <= apprizal < 100, 'Invalid mark'
+        assert 0 <= apprizal <= 100, 'Invalid mark'
+        self.homeworks_to_check.remove(homework)
+        homework.grades.update({student: apprizal})
 
 
 if __name__ == '__main__':
@@ -184,10 +186,10 @@ if __name__ == '__main__':
         except AssertionError as error:
             assert error.args == (('Invalid mark'),)
 
-    # main_teacher.check_homework(functions_homework, students[0], 100)
-    # assert main_teacher.homeworks_to_check == []
-    # assert functions_homework.done_by() == {students[0]: 100}
-    #
+    main_teacher.check_homework(functions_homework, students[0], 100)
+    assert main_teacher.homeworks_to_check == []
+    assert functions_homework.done_by() == {students[0]: 100}
+
     # try:
     #     main_teacher.check_homework(functions_homework, students[0], 100)
     # except ValueError as error:
