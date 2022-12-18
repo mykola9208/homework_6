@@ -22,10 +22,8 @@ class Course:
         return self._enrolled_by
 
     def get_lecture(self, num):
-        if num <= self.number_of_lectures:
-            return self.lectures[num-1]
-        else:
-            raise AssertionError('Invalid lecture number')
+        assert num <= self.number_of_lectures, 'Invalid lecture number'
+        return self.lectures[num-1]
 
     def get_homeworks(self):
         for lec in self.lectures:
@@ -127,6 +125,9 @@ class Teacher:
     def teaching_lectures(self):
         return self._teaching_lectures
 
+    def check_homework(self, homework, student, apprizal):
+        assert 0 <= apprizal < 100, 'Invalid mark'
+
 
 if __name__ == '__main__':
     main_teacher = Teacher('Thomas', 'Anderson')
@@ -138,7 +139,7 @@ if __name__ == '__main__':
     assert python_basic.teacher == main_teacher
     assert python_basic.enrolled_by() == []
     assert main_teacher.teaching_lectures() == python_basic.lectures
-    #
+
     students = [Student('John', 'Doe'), Student('Jane', 'Doe')]
     for student in students:
         assert str(student) == f'Student: {student.first_name} {student.last_name}'
@@ -177,12 +178,12 @@ if __name__ == '__main__':
     assert functions_homework.done_by() == {students[0]: None}
     assert main_teacher.homeworks_to_check == [functions_homework]
 
-    # for mark in (-1, 101):
-    #     try:
-    #         main_teacher.check_homework(functions_homework, students[0], mark)
-    #     except AssertionError as error:
-    #         assert error.args == ('Invalid mark',)
-    #
+    for mark in (-1, 101):
+        try:
+            main_teacher.check_homework(functions_homework, students[0], mark)
+        except AssertionError as error:
+            assert error.args == (('Invalid mark'),)
+
     # main_teacher.check_homework(functions_homework, students[0], 100)
     # assert main_teacher.homeworks_to_check == []
     # assert functions_homework.done_by() == {students[0]: 100}
