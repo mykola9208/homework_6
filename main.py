@@ -125,15 +125,15 @@ class Teacher:
     def teaching_lectures(self):
         return self._teaching_lectures
 
-    def check_homework(self, homework, student, apprizal):
-        if homework in student.assigned_homeworks:
+    def check_homework(self, homework, stud, points):
+        if homework in stud.assigned_homeworks:
             raise ValueError('Student never did that homework')
-        elif homework.grades.get(student, None) is not None:
+        elif homework.grades.get(stud, None) is not None:
             raise ValueError('You already checked that homework')
         else:
-            assert 0 <= apprizal <= 100, 'Invalid mark'
+            assert 0 <= points <= 100, 'Invalid mark'
             self.homeworks_to_check.remove(homework)
-            homework.grades.update({student: apprizal})
+            homework.grades.update({stud: points})
 
 
 if __name__ == '__main__':
@@ -189,7 +189,7 @@ if __name__ == '__main__':
         try:
             main_teacher.check_homework(functions_homework, students[0], mark)
         except AssertionError as error:
-            assert error.args == (('Invalid mark'),)
+            assert error.args == ('Invalid mark',)
 
     main_teacher.check_homework(functions_homework, students[0], 100)
     assert main_teacher.homeworks_to_check == []
