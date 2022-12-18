@@ -126,9 +126,14 @@ class Teacher:
         return self._teaching_lectures
 
     def check_homework(self, homework, student, apprizal):
-        assert 0 <= apprizal <= 100, 'Invalid mark'
-        self.homeworks_to_check.remove(homework)
-        homework.grades.update({student: apprizal})
+        if homework in student.assigned_homeworks:
+            raise ValueError('Student never did that homework')
+        elif homework.grades.get(student, None) is not None:
+            raise ValueError('You already checked that homework')
+        else:
+            assert 0 <= apprizal <= 100, 'Invalid mark'
+            self.homeworks_to_check.remove(homework)
+            homework.grades.update({student: apprizal})
 
 
 if __name__ == '__main__':
@@ -190,16 +195,16 @@ if __name__ == '__main__':
     assert main_teacher.homeworks_to_check == []
     assert functions_homework.done_by() == {students[0]: 100}
 
-    # try:
-    #     main_teacher.check_homework(functions_homework, students[0], 100)
-    # except ValueError as error:
-    #     assert error.args == ('You already checked that homework',)
-    #
-    # try:
-    #     main_teacher.check_homework(functions_homework, students[1], 100)
-    # except ValueError as error:
-    #     assert error.args == ('Student never did that homework',)
-    #
+    try:
+        main_teacher.check_homework(functions_homework, students[0], 100)
+    except ValueError as error:
+        assert error.args == ('You already checked that homework',)
+
+    try:
+        main_teacher.check_homework(functions_homework, students[1], 100)
+    except ValueError as error:
+        assert error.args == ('Student never did that homework',)
+
     substitute_teacher = Teacher('Agent', 'Smith')
     fourth_lecture = python_basic.get_lecture(4)
     assert fourth_lecture.teacher == main_teacher
@@ -208,4 +213,4 @@ if __name__ == '__main__':
     assert fourth_lecture.teacher == substitute_teacher
     assert len(main_teacher.teaching_lectures()) == python_basic.number_of_lectures - 1
     assert substitute_teacher.teaching_lectures() == [fourth_lecture]
-    # assert substitute_teacher.homeworks_to_check == []
+    assert substitute_teacher.homeworks_to_check == []
