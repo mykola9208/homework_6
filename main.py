@@ -51,13 +51,13 @@ class Lecture:
     @name.setter
     def name(self, new_name):
         self._name = new_name
-        return self._name
 
     def get_homework(self):
         return self.homework
 
     def set_homework(self, home_work):
         self.homework = home_work
+        home_work.teacher = self.teacher
 
     def new_teacher(self, subst):
         self.teacher.remove_lecture(self)
@@ -70,6 +70,7 @@ class Homework:
         self.name = name
         self.description = description
         self.grades = {}
+        self.teacher = None
         pass
 
     def __str__(self):
@@ -102,6 +103,7 @@ class Student:
     def do_homework(self, homework):
         homework.grades.setdefault(self, None)
         self.assigned_homeworks.remove(homework)
+        homework.teacher.homeworks_to_check = [homework]
 
 
 class Teacher:
@@ -173,8 +175,8 @@ if __name__ == '__main__':
     assert students[1].assigned_homeworks == [functions_homework]
 
     assert functions_homework.done_by() == {students[0]: None}
-    # assert main_teacher.homeworks_to_check == [functions_homework]
-    #
+    assert main_teacher.homeworks_to_check == [functions_homework]
+
     # for mark in (-1, 101):
     #     try:
     #         main_teacher.check_homework(functions_homework, students[0], mark)
