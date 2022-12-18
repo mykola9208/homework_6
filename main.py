@@ -83,8 +83,7 @@ class Student:
         self.enrolled_courses.append(course)
         course.enrolled_by(self)
 
-    def assigned_homeworks(self):
-        return
+
 
 class Teacher:
     def __init__(self, first_name, last_name):
@@ -140,9 +139,8 @@ if __name__ == '__main__':
 
     assert python_basic.get_homeworks() == [functions_homework]
     assert third_lecture.get_homework() == functions_homework
-
     # for student in students:
-        # assert student.assigned_homeworks == [functions_homework]
+    #     assert student.assigned_homeworks == [functions_homework]
     #
     # assert main_teacher.homeworks_to_check == []
     # students[0].do_homework(functions_homework)
