@@ -29,7 +29,7 @@ class Course:
         for lec in self.lectures:
             if lec.get_homework() is not None:
                 for stud in self._enrolled_by:
-                    stud.add_homework(lec.get_homework())
+                    stud.assigned_homeworks.append(lec.get_homework())
                 self.homeworks.append(lec.get_homework())
         return self.homeworks
 
@@ -93,10 +93,7 @@ class Student:
         self.enrolled_courses.append(course)
         course.enrolled_by(self)
         for works in course.get_homeworks():
-            self.add_homework(works)
-
-    def add_homework(self, homework):
-        self.assigned_homeworks.append(homework)
+            self.assigned_homeworks.append(works)
 
     def do_homework(self, homework):
         homework.grades.setdefault(self, None)
