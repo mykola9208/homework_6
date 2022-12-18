@@ -30,6 +30,8 @@ class Course:
     def get_homeworks(self):
         for lec in self.lectures:
             if lec.get_homework() is not None:
+                for stud in self._enrolled_by:
+                    stud.add_homework(lec.get_homework())
                 self.homeworks.append(lec.get_homework())
         return self.homeworks
 
@@ -78,7 +80,7 @@ class Student:
         self.first_name = first_name
         self.last_name = last_name
         self.enrolled_courses = []
-        self.assigned_works = []
+        self.assigned_homeworks = []
         pass
 
     def __str__(self):
@@ -87,6 +89,14 @@ class Student:
     def enroll(self, course):
         self.enrolled_courses.append(course)
         course.enrolled_by(self)
+        for works in course.get_homeworks():
+            self.add_homework(works)
+
+    def add_homework(self, homework):
+        self.assigned_homeworks.append(homework)
+
+    def do_homework(self, homework):
+        self.assigned_homeworks.remove(homework)
 
 
 class Teacher:
@@ -149,14 +159,14 @@ if __name__ == '__main__':
 
     assert python_basic.get_homeworks() == [functions_homework]
     assert third_lecture.get_homework() == functions_homework
-    # for student in students:
-        # assert student.assigned_homeworks == [functions_homework]
-    # #
+    for student in students:
+        assert student.assigned_homeworks == [functions_homework]
+
     assert main_teacher.homeworks_to_check == []
-    # students[0].do_homework(functions_homework)
-    # assert students[0].assigned_homeworks == []
-    # assert students[1].assigned_homeworks == [functions_homework]
-    #
+    students[0].do_homework(functions_homework)
+    assert students[0].assigned_homeworks == []
+    assert students[1].assigned_homeworks == [functions_homework]
+
     # assert functions_homework.done_by() == {students[0]: None}
     # assert main_teacher.homeworks_to_check == [functions_homework]
     #
