@@ -10,7 +10,7 @@ class Course:
         for i in range(1, number_of_lectures+1):
             lec = Lecture(f'Lecture {i}', i, teacher)
             self.lectures.append(lec)
-            teacher.add_lecture(lec)
+            teacher.list_lectures.append(lec)
         pass
 
     def __str__(self):
@@ -58,9 +58,9 @@ class Lecture:
         home_work.teacher = self.teacher
 
     def new_teacher(self, subst):
-        self.teacher.remove_lecture(self)
+        self.teacher.list_lectures.remove(self)
         self.teacher = subst
-        self.teacher.add_lecture(self)
+        self.teacher.list_lectures.append(self)
 
 
 class Homework:
@@ -105,22 +105,15 @@ class Teacher:
     def __init__(self, first_name, last_name):
         self.first_name = first_name
         self.last_name = last_name
-        self._teaching_lectures = []
+        self.list_lectures = []
         self.homeworks_to_check = []
         pass
 
     def __str__(self):
         return f'Teacher: {self.first_name} {self.last_name}'
 
-    def remove_lecture(self, lecture):
-        self._teaching_lectures.remove(lecture)
-
-    def add_lecture(self, lecture=None):
-        if lecture is not None:
-            self._teaching_lectures.append(lecture)
-
     def teaching_lectures(self):
-        return self._teaching_lectures
+        return self.list_lectures
 
     def check_homework(self, homework, stud, points):
         if homework in stud.assigned_homeworks:
