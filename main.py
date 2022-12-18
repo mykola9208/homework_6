@@ -57,6 +57,11 @@ class Lecture:
     def set_homework(self, home_work):
         self.homework = home_work
 
+    def new_teacher(self, subst):
+        self.teacher.remove_lecture(self)
+        self.teacher = subst
+        self.teacher.teaching_lectures(self)
+
 
 class Homework:
     def __init__(self, name, description):
@@ -84,16 +89,19 @@ class Student:
         course.enrolled_by(self)
 
 
-
 class Teacher:
     def __init__(self, first_name, last_name):
         self.first_name = first_name
         self.last_name = last_name
         self._teaching_lectures = []
+        self.homeworks_to_check = []
         pass
 
     def __str__(self):
         return f'Teacher: {self.first_name} {self.last_name}'
+
+    def remove_lecture(self, lecture):
+        self._teaching_lectures.remove(lecture)
 
     def teaching_lectures(self, lecture=None):
         if lecture is not None:
@@ -140,9 +148,9 @@ if __name__ == '__main__':
     assert python_basic.get_homeworks() == [functions_homework]
     assert third_lecture.get_homework() == functions_homework
     # for student in students:
-    #     assert student.assigned_homeworks == [functions_homework]
-    #
-    # assert main_teacher.homeworks_to_check == []
+        # assert student.assigned_homeworks == [functions_homework]
+    # #
+    assert main_teacher.homeworks_to_check == []
     # students[0].do_homework(functions_homework)
     # assert students[0].assigned_homeworks == []
     # assert students[1].assigned_homeworks == [functions_homework]
@@ -170,12 +178,12 @@ if __name__ == '__main__':
     # except ValueError as error:
     #     assert error.args == ('Student never did that homework',)
     #
-    # substitute_teacher = Teacher('Agent', 'Smith')
-    # fourth_lecture = python_basic.get_lecture(4)
-    # assert fourth_lecture.teacher == main_teacher
-    #
-    # fourth_lecture.new_teacher(substitute_teacher)
-    # assert fourth_lecture.teacher == substitute_teacher
-    # assert len(main_teacher.teaching_lectures()) == python_basic.number_of_lectures - 1
-    # assert substitute_teacher.teaching_lectures() == [fourth_lecture]
+    substitute_teacher = Teacher('Agent', 'Smith')
+    fourth_lecture = python_basic.get_lecture(4)
+    assert fourth_lecture.teacher == main_teacher
+
+    fourth_lecture.new_teacher(substitute_teacher)
+    assert fourth_lecture.teacher == substitute_teacher
+    assert len(main_teacher.teaching_lectures()) == python_basic.number_of_lectures - 1
+    assert substitute_teacher.teaching_lectures() == [fourth_lecture]
     # assert substitute_teacher.homeworks_to_check == []
