@@ -72,14 +72,19 @@ class Student:
     def __init__(self, first_name, last_name):
         self.first_name = first_name
         self.last_name = last_name
+        self.enrolled_courses = []
+        self.assigned_works = []
         pass
 
     def __str__(self):
         return f'Student: {self.first_name} {self.last_name}'
 
     def enroll(self, course):
+        self.enrolled_courses.append(course)
         course.enrolled_by(self)
 
+    def assigned_homeworks(self):
+        return
 
 class Teacher:
     def __init__(self, first_name, last_name):
@@ -137,7 +142,7 @@ if __name__ == '__main__':
     assert third_lecture.get_homework() == functions_homework
 
     # for student in students:
-    #     assert student.assigned_homeworks == [functions_homework]
+        # assert student.assigned_homeworks == [functions_homework]
     #
     # assert main_teacher.homeworks_to_check == []
     # students[0].do_homework(functions_homework)
