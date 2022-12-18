@@ -6,6 +6,7 @@ class Course:
         self.lectures = []
         self._enrolled_by = []
         self.number_of_lectures = number_of_lectures
+        self.homeworks = []
         for i in range(1, number_of_lectures+1):
             lec = Lecture(f'Lecture {i}', i, teacher)
             self.lectures.append(lec)
@@ -26,12 +27,19 @@ class Course:
         else:
             raise AssertionError('Invalid lecture number')
 
+    def get_homeworks(self):
+        for lec in self.lectures:
+            if lec.get_homework() is not None:
+                self.homeworks.append(lec.get_homework())
+        return self.homeworks
+
 
 class Lecture:
     def __init__(self, name, number, teacher):
         self.name = name
         self.number = number
         self.teacher = teacher
+        self.homework = None
         pass
 
     @property
@@ -43,7 +51,11 @@ class Lecture:
         self._name = new_name
         return self._name
 
+    def get_homework(self):
+        return self.homework
 
+    def set_homework(self, home_work):
+        self.homework = home_work
 
 
 class Homework:
@@ -51,6 +63,9 @@ class Homework:
         self.name = name
         self.description = description
         pass
+
+    def __str__(self):
+        return f'{self.name}: {self.description}'
 
 
 class Student:
@@ -100,7 +115,6 @@ if __name__ == '__main__':
 
     assert python_basic.enrolled_by() == students
 
-
     third_lecture = python_basic.get_lecture(3)
     assert third_lecture.name == 'Lecture 3'
     assert third_lecture.number == 3
@@ -113,15 +127,15 @@ if __name__ == '__main__':
     third_lecture.name = 'Logic separation. Functions'
     assert third_lecture.name == 'Logic separation. Functions'
 
-    # assert python_basic.get_homeworks() == []
-    # assert third_lecture.get_homework() is None
+    assert python_basic.get_homeworks() == []
+    assert third_lecture.get_homework() is None
     functions_homework = Homework('Functions', 'what to do here')
-    # assert str(functions_homework) == 'Functions: what to do here'
-    # third_lecture.set_homework(functions_homework)
-    #
-    # assert python_basic.get_homeworks() == [functions_homework]
-    # assert third_lecture.get_homework() == functions_homework
-    #
+    assert str(functions_homework) == 'Functions: what to do here'
+    third_lecture.set_homework(functions_homework)
+
+    assert python_basic.get_homeworks() == [functions_homework]
+    assert third_lecture.get_homework() == functions_homework
+
     # for student in students:
     #     assert student.assigned_homeworks == [functions_homework]
     #
