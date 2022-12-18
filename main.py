@@ -10,7 +10,7 @@ class Course:
         for i in range(1, number_of_lectures+1):
             lec = Lecture(f'Lecture {i}', i, teacher)
             self.lectures.append(lec)
-            teacher.teaching_lectures(lec)
+            teacher.add_lecture(lec)
         pass
 
     def __str__(self):
@@ -60,7 +60,7 @@ class Lecture:
     def new_teacher(self, subst):
         self.teacher.remove_lecture(self)
         self.teacher = subst
-        self.teacher.teaching_lectures(self)
+        self.teacher.add_lecture(self)
 
 
 class Homework:
@@ -103,9 +103,11 @@ class Teacher:
     def remove_lecture(self, lecture):
         self._teaching_lectures.remove(lecture)
 
-    def teaching_lectures(self, lecture=None):
+    def add_lecture(self, lecture=None):
         if lecture is not None:
             self._teaching_lectures.append(lecture)
+
+    def teaching_lectures(self):
         return self._teaching_lectures
 
 
