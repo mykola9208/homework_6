@@ -69,10 +69,14 @@ class Homework:
     def __init__(self, name, description):
         self.name = name
         self.description = description
+        self.grades = {}
         pass
 
     def __str__(self):
         return f'{self.name}: {self.description}'
+
+    def done_by(self):
+        return self.grades
 
 
 class Student:
@@ -96,6 +100,7 @@ class Student:
         self.assigned_homeworks.append(homework)
 
     def do_homework(self, homework):
+        homework.grades.setdefault(self, None)
         self.assigned_homeworks.remove(homework)
 
 
@@ -167,7 +172,7 @@ if __name__ == '__main__':
     assert students[0].assigned_homeworks == []
     assert students[1].assigned_homeworks == [functions_homework]
 
-    # assert functions_homework.done_by() == {students[0]: None}
+    assert functions_homework.done_by() == {students[0]: None}
     # assert main_teacher.homeworks_to_check == [functions_homework]
     #
     # for mark in (-1, 101):
